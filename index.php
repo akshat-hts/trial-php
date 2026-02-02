@@ -1,3 +1,4 @@
 <?php
-    echo "asdflkj\n";
+    echo "new php website"; 
+    echo "\n Hello world";  
 ?>
