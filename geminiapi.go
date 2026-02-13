@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-
+    "bufio"
+    "strings"
 	"github.com/joho/godotenv" // 1. Import the loader
 	"google.golang.org/genai"
+    "time"
 )
 
 func main() {
@@ -26,18 +28,25 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-
-    // Using gemini-2.0-flash as it is the current standard stable ID
-    result, err := client.Models.GenerateContent(
-        ctx,
-        "gemini-2.5-flash", 
-        genai.Text("what is the ai bubble"),
-        nil,
-    )
-    if err != nil {
-        log.Fatal(err)
+    for {
+        fmt.Print("Enter Prompt: ")
+    
+        reader := bufio.NewReader(os.Stdin)
+        input, _ := reader.ReadString('\n')
+        input = strings.TrimSpace(input)
+    
+        // Using gemini-2.0-flash as it is the current standard stable ID
+        result, err := client.Models.GenerateContent(
+            ctx,
+            "gemini-2.5-flash", 
+            genai.Text(input),
+            nil,
+        )
+        if err != nil {
+            log.Fatal(err)
+        }
+        time.Sleep(4 * time.Second)
+        // The SDK's result.Text() helper is usually sufficient
+        fmt.Println(result.Text())
     }
-
-    // The SDK's result.Text() helper is usually sufficient
-    fmt.Println(result.Text())
 }
